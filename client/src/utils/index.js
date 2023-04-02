@@ -4,5 +4,23 @@ export const formatAddress = (address) => {
   }
   
 export const contractAddress = () => {
-  return "0xC8d229d9A949A0cb5AC642F9F44Cec2437662b6d";
+  return "0x6aD10037d262Ff6dd84274543376443ffA560273";
+}
+
+export const formatDate = (inputDate)  => {
+  const inputDates = inputDate.toString();
+  const day = inputDates.substring(0, 2);
+  const month = inputDates.substring(2, 4);
+  const year = inputDates.substring(4);
+
+  const date = new Date(`${year}-${month}-${day}`);
+
+  // Format the date as desired
+  const formattedDate = date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  return formattedDate;
 }

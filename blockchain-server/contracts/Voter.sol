@@ -26,6 +26,7 @@ contract VoterRegistrationContract {
         string absenteeVotingInformation;
         string voterIDRequirements;
         string electionImage;
+        uint256[] positions;
     }
 
     struct Position {
@@ -37,6 +38,7 @@ contract VoterRegistrationContract {
         string termLength;
         string electionCycle;
         address[] candidates;
+        address[] voters;
     }
 
     mapping(address => Voter) public voters;
@@ -157,6 +159,7 @@ contract VoterRegistrationContract {
             requirements,
             termLength,
             electionCycle,
+            new address[](0),
             new address[](0)
         );
         numPositions++;
@@ -169,6 +172,36 @@ contract VoterRegistrationContract {
         }
         return allPositions;
     }
+
+   function addPositionToElection(address newelectionAddress, uint256 positionId) public {
+    require(positionId < numPositions, "Invalid position ID");
+    require(upcomingelections[newelectionAddress].electionAddress != address(0), "Election not found");
+
+    // Get the position and election objects
+    Position storage position = positions[positionId];
+    UpcomingElections storage election = upcomingelections[newelectionAddress];
+
+    // Make sure the position is not already added to the election
+    for (uint i = 0; i < election.positions.length; i++) {
+        require(election.positions[i] != positionId, "Position already added to election");
+    }
+
+    // Add the position to the election's list of positions
+    election.positions.push(positionId);
+
+    // Add the election to the position's list of elections
+    position.candidates.push(newelectionAddress);
+}
+
+function addVoterToPosition(address electionId, uint256 positionId, address voter) external {
+    UpcomingElections storage election = upcomingelections[electionId];
+    require(election.positions.length > positionId, "Invalid position ID");
+    uint256 positionIndex = election.positions[positionId];
+    Position storage position = positions[positionIndex];
+    position.voters.push(voter);
+}
+
+
 
     // Define a function to add a candidate to a position
     function addCandidateToPosition(
