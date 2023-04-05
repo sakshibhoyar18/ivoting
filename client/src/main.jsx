@@ -10,7 +10,7 @@ import App from './App';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-  <ThirdwebProvider activeChain={'goerli'}>  
+  <ThirdwebProvider activeChain={'binance-testnet'}>  
   {/* binance-testnet */}
     <Router>
       <StateContextProvider>

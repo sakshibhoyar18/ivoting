@@ -4,7 +4,8 @@ export const formatAddress = (address) => {
   }
   
 export const contractAddress = () => {
-  return "0x6aD10037d262Ff6dd84274543376443ffA560273";
+  return "0x358fE929DE568fDF44286a8702a22bf72BB6c405";
+  // 0x358fE929DE568fDF44286a8702a22bf72BB6c405
 }
 
 export const formatDate = (inputDate)  => {

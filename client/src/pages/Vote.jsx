@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Loader } from '../components'
 import { formatDate } from '../utils';
@@ -9,19 +9,35 @@ import { thirdweb } from '../assets';
 const Vote = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const { state } = useLocation()
-  
-const data = [
-    { id: 1, name: 'John Doe' },
-    { id: 2, name: 'Jane Smith' },
-    { id: 3, name: 'Bob Johnson' },
-    { id: 4, name: 'Sara Lee' },
-    { id: 5, name: 'Mike Brown' },
-  ];
+    const { contract } = useContract(contractAddress());
+    const [Positions, setPositions] = useState([])
+    const [CandidateList, setCandidateList] = useState([])
+    const { data } = useContractRead(contract, "getAllPositions");
+    
+    useEffect(() => {
+        if(data) {
+          const index =  data.findIndex(d =>
+            d.positionName === state.positionName &&
+            formatDate(parseInt(d.position_date)) === formatDate(parseInt(state.position_date))
+          );
+          setCandidateList(data[index]);
+        }
+    }, [data, state.positionName, state.position_date]);
+      
+    console.log(useContractRead(contract, "voters", '0xdCd8E0fCD7bb974e733a05DcaF6f757a10D4a394'));
+
+    const datas = [
+        { id: 1, name: 'John Doe' },
+        { id: 2, name: 'Jane Smith' },
+        { id: 3, name: 'Bob Johnson' },
+        { id: 4, name: 'Sara Lee' },
+        { id: 5, name: 'Mike Brown' },
+    ];
     const handleChange = (event) => {
       setSearchTerm(event.target.value);
     };
     
-    const filteredData = data.filter((row) => {
+    const filteredData = datas.filter((row) => {
       return row.name.toLowerCase().includes(searchTerm.toLowerCase());
     });
     return (
